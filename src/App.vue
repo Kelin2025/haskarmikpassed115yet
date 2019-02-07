@@ -1,36 +1,46 @@
 <template>
   <div id="app">
     <github-corner/>
-    <p>Has Vue passed React yet?</p>
+    <p>
+      Has Karmik passed
+      <b>1:15</b> yet?
+    </p>
     <h1 v-if="!tie">{{ vueHasPassedReact ? 'YES' : 'NO' }}</h1>
     <h1 :class="{ pad : tie }" v-else>TIE!</h1>
     <p>
       <small v-if="!vueHasPassedReact && !tie" class="away">
-        1:19 now
+        <b>1:17</b> now
       </small>
-      <small v-else-if="vueHasPassedReact && !tie" class="ahead">
-        ...
-      </small>
+      <small v-else-if="vueHasPassedReact && !tie" class="ahead">...</small>
     </p>
+    <div class="iframe">
+      <iframe
+        src="https://player.twitch.tv/?channel=karmikkoala"
+        frameborder="0"
+        allowfullscreen="true"
+        scrolling="no"
+      ></iframe>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-import GithubCorner from './components/GithubCorner'
-import { VueIcon, ReactIcon, StarIcon } from './components/icons'
+import axios from "axios";
+import GithubCorner from "./components/GithubCorner";
+import { VueIcon, ReactIcon, StarIcon } from "./components/icons";
 
-const FUNCTIONS_ENDPOINT = 'https://wt-13e53fa81a1f88b8fd161c9e57aeaac4-0.sandbox.auth0-extend.com/fetchGithubStars'
+const FUNCTIONS_ENDPOINT =
+  "https://wt-13e53fa81a1f88b8fd161c9e57aeaac4-0.sandbox.auth0-extend.com/fetchGithubStars";
 
 export default {
-  name: 'App',
+  name: "App",
 
   data() {
     return {
       repos: null,
       error: false,
       reloading: false
-    }
+    };
   },
 
   components: {
@@ -41,80 +51,64 @@ export default {
   },
 
   mounted() {
-    if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
-      document.body.classList.remove('no-touch')
+    if ("ontouchstart" in window || navigator.msMaxTouchPoints) {
+      document.body.classList.remove("no-touch");
     }
   },
 
-  computed: {
-    vueHasPassedReact() {
-      return this.vueStars > this.reactStars
-    },
-
-    vueStars() {
-      return this.repos.vue.stargazers.totalCount
-    },
-
-    reactStars() {
-      return this.repos.react.stargazers.totalCount
-    },
-
-    tie() {
-      return this.vueStars === this.reactStars
-    }
-  },
+  computed: {},
 
   filters: {
     formatNumber(number) {
-      return new Intl.NumberFormat().format(number)
+      return new Intl.NumberFormat().format(number);
     }
   },
 
   methods: {
     async fetchRepos() {
       try {
-        const { data: res } = await axios.get(FUNCTIONS_ENDPOINT)
+        const { data: res } = await axios.get(FUNCTIONS_ENDPOINT);
         if (res.errors && res.errors.length) {
-          this.error = true
-          this.repos = null
+          this.error = true;
+          this.repos = null;
           // eslint-disable-next-line
-          console.log(res.errors)
+          console.log(res.errors);
         } else {
-          this.error = true
-          this.repos = res.data
+          this.error = true;
+          this.repos = res.data;
         }
       } catch (err) {
         // eslint-disable-next-line
-        console.log(err)
+        console.log(err);
       }
     },
 
     async reload() {
-      if (this.reloading) return
-      this.reloading = true
-      await this.fetchRepos()
+      if (this.reloading) return;
+      this.reloading = true;
+      await this.fetchRepos();
       setTimeout(() => {
-        this.reloading = false
-      }, 900)
+        this.reloading = false;
+      }, 900);
     }
   }
-}
+};
 </script>
 
 <style>
-
 * {
   box-sizing: border-box;
 }
 
 ::selection {
-  background: rgba(0,0,0,0);
+  background: rgba(0, 0, 0, 0);
 }
 ::-moz-selection {
-  background: rgba(0,0,0,0);
+  background: rgba(0, 0, 0, 0);
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -124,20 +118,27 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   text-align: center;
   color: #333;
   background: #efefef;
 }
 
 #app {
-  width: 300px;
+  width: 800px;
   border: 1px solid #dddddd;
   border-radius: 4px;
   background: #ffffff;
-  box-shadow: 0 15px 35px rgba(50,50,93,.1), 0 5px 15px rgba(0,0,0,.07);
+  box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
   overflow: hidden;
   position: relative;
+}
+
+@media (max-width: 768px) {
+  #app {
+    height: 100%;
+  }
 }
 
 h1 {
@@ -195,7 +196,8 @@ p {
   padding: 0 1em;
 }
 
-.away, .ahead {
+.away,
+.ahead {
   display: block;
   margin-bottom: 40px;
 }
@@ -228,13 +230,27 @@ p {
   animation: rotate 1s infinite ease-in-out;
 }
 
+.iframe {
+  position: relative;
+  overflow: hidden;
+  padding-top: 56.25%;
+}
+
+iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
 @keyframes rotate {
   from {
     transform: rotate(0deg);
   }
-  to { 
+  to {
     transform: rotate(-360deg);
   }
 }
-
 </style>

@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <github-corner/>
     <p>
       Has Karmik passed
       <b>1:15</b> yet?
